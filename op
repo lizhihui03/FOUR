@@ -1,0 +1,135 @@
+#define  _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <iostream>
+#include <fstream>
+#include <ctime>
+#include <cstdlib>
+using namespace std;
+#include <string>
+
+//生成随机数
+int random_int(int min, int max) {
+
+    return min + rand() % (max - min + 1);
+
+}
+
+//生成四则运算表达式（括号版）
+string generateexpression1(int num, int max, char operator1) {
+    
+    string expression;
+    for (int i = 0; i < num; i++) {
+        int num1 = random_int(1, max);
+        int num2 = random_int(1, max);
+        int num3 = random_int(1, max);
+
+        printf("(");
+        printf("%d %c %d", num1, operator1, num2);
+        printf(") %c %d\n", operator1, num3);
+        string expression = to_string(num1) + " " + operator1 + " " + to_string(num2) + operator1 + " " + to_string(num3);
+    }
+    return expression;
+
+}
+//生成四则运算表达式（无括号版）
+string generateexpression2(int num, int max, char operator1) {
+   
+    string expression;
+    for (int i = 0; i < num; i++) {
+        int num1 = random_int(1, max);
+        int num2 = random_int(1, max);
+
+        printf("%d %c %d\n", num1, operator1, num2);
+        string expression = to_string(num1) + " " + operator1 + " " + to_string(num2);
+    }
+    return expression;
+
+}
+//生成四则运算表达式（文件括号版）
+string generateexpression3(int num, int max, char operator1) {
+
+    int num1 = random_int(1, max);
+    int num2 = random_int(1, max);
+    int num3 = random_int(1, max);
+    string expression = to_string(num1) + " " + operator1 + " " + to_string(num2) + operator1 + " " + to_string(num3);
+    return expression;
+
+}
+//生成四则运算表达式（文件无括号版）
+string generateexpression4(int num, int max, char operator1) {
+
+    int num1 = random_int(1, max);
+    int num2 = random_int(1, max);
+    string expression = to_string(num1) + " " + operator1 + " " + to_string(num2);
+    return expression;
+
+}
+
+// 放入文件中
+void generatePracticeQuestions(int num, int max, char operator1, bool bracket1) {
+    
+    ofstream outFile("aaa.txt");
+    if (!outFile) {
+        cout << "无法打开文件 aaa.txt" << endl;
+        return;
+    }
+    for (int i = 0; i < num; i++) {
+        if (bracket1)
+        {
+            string expression = generateexpression3(num, max, operator1);
+            outFile << expression << " = " << endl;
+        }
+        else {
+            string expression = generateexpression4(num, max, operator1);
+            outFile << expression << " = " << endl;
+        }
+    }
+    outFile.close();
+    cout << "生成的 " << num << " 道练习题，保存在aaa.txt 中。" << endl;
+
+}
+
+
+//主函数
+int main() {
+    int num, max, bracket1, bracket2, bracket3;
+    char operator1;
+
+    printf("请输入题目数量：");
+    scanf("%d", &num);
+
+    printf("请输入最大数：");
+    scanf("%d", &max);
+
+    printf("请选择运算符（+、-、*、/）：");
+    scanf(" %c", &operator1);
+
+    printf("请选择是否带括号？（1为是，0为否）：");
+    scanf("%d", &bracket1);
+
+    printf("请选择是否有小数？（1为是，0为否）：");
+    scanf("%d", &bracket2);
+
+    printf("请选择输出方式（1为屏幕，0为文件）：");
+    scanf("%d", &bracket3);
+
+    srand(time(NULL));
+
+
+    if (bracket3) {
+        if (bracket1) {
+            generateexpression1(num, max, operator1);
+        }
+        else {
+            generateexpression2(num, max, operator1);
+        }
+    }
+    else if (bracket3 == 0) {
+        generatePracticeQuestions(num, max, operator1, bracket1);
+
+    }
+
+    return 0;
+}
